@@ -1,6 +1,7 @@
 from django.db.models import Count, Q
 from django.shortcuts import redirect
 from django.views.generic.edit import CreateView
+from django.contrib import messages
 
 from .forms import FootballPlayerForm
 from .models import FootballClub
@@ -15,6 +16,7 @@ class AddFootballPlayerView(CreateView):
         club = player.club
         self.__increment_no_players(club)
         self.__send_mail_success(form)
+        messages.add_message(self.request, messages.INFO, "Dodano piłkarza")
         return redirect("add_player")
 
     def form_invalid(self, form):
