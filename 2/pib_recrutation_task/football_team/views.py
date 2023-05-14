@@ -8,7 +8,7 @@ from .models import FootballClub
 
 class AddFootballPlayerView(CreateView):
     form_class = FootballPlayerForm
-    template_name = 'football_team/add_football_player.html'
+    template_name = "football_team/add_football_player.html"
 
     def form_valid(self, form):
         player = form.save()
@@ -16,11 +16,11 @@ class AddFootballPlayerView(CreateView):
         self.__increment_no_players(club)
 
         player_name = f"{form.cleaned_data.get('first_name')} {form.cleaned_data.get('last_name')}"
-        subject = 'Pomyślnie dodano piłkarza'
-        message = f'Dodano poprawnie piłkarza  {player_name}'
+        subject = "Pomyślnie dodano piłkarza"
+        message = f"Dodano poprawnie piłkarza  {player_name}"
         self.__send_mail(subject, message)
 
-        return redirect('add_player')
+        return redirect("add_player")
 
     def __increment_no_players(self, club):
         club.no_players += 1
@@ -36,7 +36,7 @@ class AddFootballPlayerView(CreateView):
         return super().form_invalid(form)
 
     def __send_mail(self, subject, msg):
-        from_email = 'nadawca@email.com'
-        recipient_list = ['odbiorca@email.com']
+        from_email = "nadawca@email.com"
+        recipient_list = ["odbiorca@email.com"]
         # send_mail(subject, msg, from_email, recipient_list)
         return

@@ -5,4 +5,3 @@ from .models import FootballClub, FootballPlayer
 admin.site.register(FootballClub)
 
 admin.site.register(FootballPlayer)
-
