@@ -13,16 +13,19 @@ class AddFootballPlayerView(CreateView):
     def form_valid(self, form):
         player = form.save()
         club = player.club
-
-        club.no_players += 1
-        club.save()
+        self.__increment_no_players(club)
 
         player_name = f"{form.cleaned_data.get('first_name')} {form.cleaned_data.get('last_name')}"
-        subject = f"Pomyślnie dodano piłkarza"
+        subject = 'Pomyślnie dodano piłkarza'
         message = f'Dodano poprawnie piłkarza  {player_name}'
         self.__send_mail(subject, message)
 
         return redirect('add_player')
+
+    def __increment_no_players(self, club):
+        club.no_players += 1
+        club.save()
+        return club
 
     def form_invalid(self, form):
         player_name = f"{form.cleaned_data.get('first_name')} {form.cleaned_data.get('last_name')}"
