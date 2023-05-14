@@ -14,26 +14,30 @@ class AddFootballPlayerView(CreateView):
         player = form.save()
         club = player.club
         self.__increment_no_players(club)
-
-        player_name = f"{form.cleaned_data.get('first_name')} {form.cleaned_data.get('last_name')}"
-        subject = "Pomyślnie dodano piłkarza"
-        message = f"Dodano poprawnie piłkarza  {player_name}"
-        self.__send_mail(subject, message)
-
+        self.__send_mail_success(form)
         return redirect("add_player")
+
+    def form_invalid(self, form):
+        self.__send_mail_failure(form)
+
+        return super().form_invalid(form)
 
     def __increment_no_players(self, club):
         club.no_players += 1
         club.save()
         return club
 
-    def form_invalid(self, form):
+    def __send_mail_success(self, form):
+        player_name = f"{form.cleaned_data.get('first_name')} {form.cleaned_data.get('last_name')}"
+        subject = "Pomyślnie dodano piłkarza"
+        message = f"Dodano poprawnie piłkarza  {player_name}"
+        self.__send_mail(subject, message)
+
+    def __send_mail_failure(self, form):
         player_name = f"{form.cleaned_data.get('first_name')} {form.cleaned_data.get('last_name')}"
         subject = f"Dodanie piłkarza nie powiodło się"
         message = f"Nie udało się dodać piłkarza {player_name}"
         self.__send_mail(subject, message)
-
-        return super().form_invalid(form)
 
     def __send_mail(self, subject, msg):
         from_email = "nadawca@email.com"
